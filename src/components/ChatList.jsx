@@ -51,10 +51,12 @@ function ChatList({ conversations, currentConversations, selectFn }) {
   return (
     <div
       className={`${
-        currentConversations ? "hidden" : "w-full"
-      } border-l p-4 overflow-y-auto`}
+        currentConversations ? "w-0 p-0" : "w-full"
+      } lg:w-1/4 border-l lg:p-4 overflow-y-auto`}
     >
-      <h2 className="text-lg font-bold mb-4">چت‌ها</h2>
+      <h2 className="text-lg font-bold mb-4 bg-teal-700 lg:bg-amber-500 ">
+        چت‌ها
+      </h2>
       {mainConversationsList?.map((chat) => (
         <div
           key={chat.conversation_id}
