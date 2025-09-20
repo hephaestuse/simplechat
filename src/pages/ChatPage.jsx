@@ -8,7 +8,7 @@ import { getUserConversations } from "../helpers/userActions";
 
 function ChatPage() {
   const [conversations, setConversations] = useState();
-  const [currentConversations, setCurrentConversations] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState(null);
   const session = useSession();
   useEffect(() => {
     const getConversations = async () => {
@@ -19,17 +19,20 @@ function ChatPage() {
   }, []);
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      <Header />
+      <Header
+        setCurrentConversation={setCurrentConversation}
+        currentConversation={currentConversation}
+      />
       <div className="flex flex-1 overflow-hidden">
         <ChatList
           conversations={conversations}
-          selectFn={setCurrentConversations}
-          currentConversations={currentConversations}
+          selectFn={setCurrentConversation}
+          currentConversations={currentConversation}
         />
-        {currentConversations && (
-          <div className="flex-1 flex flex-col">
-            <MessageList currentConversations={currentConversations} />
-            <MessageForm currentConversations={currentConversations} />
+        {currentConversation && (
+          <div className="flex-1 flex flex-col bg-amber-600">
+            <MessageList currentConversations={currentConversation} />
+            <MessageForm currentConversations={currentConversation} />
           </div>
         )}
       </div>

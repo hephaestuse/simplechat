@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { signOut } from "../helpers/Auth";
 import { getUserProfile } from "../helpers/userActions";
+import { ChevronLeft } from "lucide-react";
 
-function Header() {
+function Header({ setCurrentConversation, currentConversation }) {
   const [profile, setProfile] = useState();
+
   useEffect(() => {
     const handleGetUser = async () => {
       const { sucsess, data } = await getUserProfile();
@@ -12,12 +14,36 @@ function Header() {
     handleGetUser();
   }, []);
 
+  // 👇 هندل بک
+  useEffect(() => {
+    const handleBack = () => {
+      setCurrentConversation("");
+    };
+
+    if (currentConversation) {
+      // وقتی مکالمه انتخاب شد → تاریخچه اضافه کن
+      history.pushState({}, "");
+      window.addEventListener("popstate", handleBack);
+    }
+
+    return () => {
+      window.removeEventListener("popstate", handleBack);
+    };
+  }, [currentConversation, setCurrentConversation]);
+
   const handleSignOut = () => {
     signOut();
   };
+
   return (
     <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">چتک</h1>
+      {currentConversation ? (
+        <span onClick={() => setCurrentConversation("")}>
+          <ChevronLeft strokeWidth={1.5} />
+        </span>
+      ) : (
+        <h1 className="text-xl font-bold">چتک</h1>
+      )}
       <div className="flex items-center gap-4">
         <span>{profile?.username}</span>
         <button

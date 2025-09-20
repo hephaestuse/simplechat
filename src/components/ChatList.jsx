@@ -19,8 +19,6 @@ function ChatList({ conversations, currentConversations, selectFn }) {
         },
       }
     );
-
-    console.log(data, error);
   };
   useEffect(() => {
     if (!conversations) return;
@@ -51,7 +49,11 @@ function ChatList({ conversations, currentConversations, selectFn }) {
       </div>
     );
   return (
-    <div className="w-1/4 bg-gray-50 border-l p-4 overflow-y-auto">
+    <div
+      className={`${
+        currentConversations ? "hidden" : "w-full"
+      } border-l p-4 overflow-y-auto`}
+    >
       <h2 className="text-lg font-bold mb-4">چت‌ها</h2>
       {mainConversationsList?.map((chat) => (
         <div
