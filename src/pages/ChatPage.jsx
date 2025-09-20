@@ -30,7 +30,7 @@ function ChatPage() {
           currentConversations={currentConversation}
         />
         {currentConversation && (
-          <div className="flex-1 flex flex-col bg-amber-600">
+          <div className="flex-1 flex flex-col">
             <MessageList currentConversations={currentConversation} />
             <MessageForm currentConversations={currentConversation} />
           </div>
