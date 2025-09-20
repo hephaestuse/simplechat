@@ -24,6 +24,7 @@ function ChatPage() {
         <ChatList
           conversations={conversations}
           selectFn={setCurrentConversations}
+          currentConversations={currentConversations}
         />
         {currentConversations && (
           <div className="flex-1 flex flex-col">

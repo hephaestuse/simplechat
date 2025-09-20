@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase/supabase";
 import { Skeleton } from "./Skeleton";
 import ChatListItemSkeleton from "./ChatListItemSkeleton";
 
-function ChatList({ conversations, selectFn }) {
+function ChatList({ conversations, currentConversations, selectFn }) {
   const user = useSession();
   const [mainConversationsList, setMainConversationsList] = useState(null);
   const handleCreateConversation = async () => {
@@ -56,7 +56,9 @@ function ChatList({ conversations, selectFn }) {
       {mainConversationsList?.map((chat) => (
         <div
           key={chat.conversation_id}
-          className="p-2 mb-2 hover:bg-gray-200 rounded cursor-pointer"
+          className={`${
+            currentConversations === chat.conversation_id ? "bg-gray-200" : ""
+          } p-2 mb-2 hover:bg-gray-200 rounded cursor-pointer`}
           onClick={() => selectFn(chat.conversation_id)}
         >
           {/* اینجا میتونیم آی دی پارتنر رو هم پاس بدیم */}
