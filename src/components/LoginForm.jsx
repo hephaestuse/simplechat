@@ -9,7 +9,6 @@ function LoginForm({ setActiveTab }) {
   const handleLogIn = async () => {
     if (email && password) {
       const { sucsess, data } = await SignInByEmail(email, password);
-      console.log(data);
 
       sucsess && <Navigate to={"/chat"} replace />;
       sucsess

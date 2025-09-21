@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { sendMessage } from "../helpers/messageActions";
 import { useSession } from "../context/SessionProvider";
+import { useConversation } from "../zustand/conversationStore";
 
-function MessageForm(currentConversations) {
+function MessageForm() {
+  const currentConversationId = useConversation(
+    (state) => state.currentConversationId
+  );
   const user = useSession();
   const [newMessage, setNewMessage] = useState("");
   const [rows, setRows] = useState(1);
@@ -10,7 +14,7 @@ function MessageForm(currentConversations) {
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
     const { sucsess, data } = sendMessage(
-      currentConversations.currentConversations,
+      currentConversationId,
       user.user.id,
       newMessage
     );

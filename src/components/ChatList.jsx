@@ -3,8 +3,15 @@ import { useSession } from "../context/SessionProvider";
 import { supabase } from "../lib/supabase/supabase";
 import { Skeleton } from "./Skeleton";
 import ChatListItemSkeleton from "./ChatListItemSkeleton";
+import { useConversation } from "../zustand/conversationStore";
 
-function ChatList({ conversations, currentConversations, selectFn }) {
+function ChatList({ conversations }) {
+  const currentConversation = useConversation(
+    (state) => state.currentConversationId
+  );
+  const setCurrentConversationId = useConversation(
+    (state) => state.setCurrentConversationId
+  );
   const user = useSession();
   const [mainConversationsList, setMainConversationsList] = useState(null);
   const handleCreateConversation = async () => {
@@ -36,7 +43,6 @@ function ChatList({ conversations, currentConversations, selectFn }) {
         }
       );
       setMainConversationsList(data.conversations);
-      console.log(data);
     };
     getConversationMembers();
   }, [conversations]);
@@ -51,7 +57,7 @@ function ChatList({ conversations, currentConversations, selectFn }) {
   return (
     <div
       className={`${
-        currentConversations ? "w-0 p-0" : "w-full"
+        currentConversation ? "w-0 p-0" : "w-full"
       } lg:w-1/4 border-l lg:p-4 overflow-y-auto`}
     >
       <h2 className="text-lg font-bold mb-4 ">چت‌ها</h2>
@@ -59,9 +65,9 @@ function ChatList({ conversations, currentConversations, selectFn }) {
         <div
           key={chat.conversation_id}
           className={`${
-            currentConversations === chat.conversation_id ? "bg-gray-200" : ""
+            currentConversation === chat.conversation_id ? "bg-gray-200" : ""
           } p-2 mb-2 hover:bg-gray-200 rounded cursor-pointer`}
-          onClick={() => selectFn(chat.conversation_id)}
+          onClick={() => setCurrentConversationId(chat.conversation_id)}
         >
           {/* اینجا میتونیم آی دی پارتنر رو هم پاس بدیم */}
           <p className="font-semibold">{chat.partner_username}</p>

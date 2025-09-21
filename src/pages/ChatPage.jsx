@@ -5,11 +5,23 @@ import MessageForm from "../components/MessageForm";
 import { useEffect, useState } from "react";
 import { useSession } from "../context/SessionProvider";
 import { getUserConversations } from "../helpers/userActions";
+import useBreakpoint from "../hooks/useBreakpoint";
+import { useUi } from "../zustand/uiStore";
+import { useConversation } from "../zustand/conversationStore";
 
 function ChatPage() {
   const [conversations, setConversations] = useState();
+  const currentConversationId = useConversation(
+    (state) => state.currentConversationId
+  );
   const [currentConversation, setCurrentConversation] = useState(null);
   const session = useSession();
+  const breakPoint = useBreakpoint();
+  const setDiviceType = useUi((state) => state.setDiviceType);
+
+  useEffect(() => {
+    setDiviceType(breakPoint);
+  }, [breakPoint]);
   useEffect(() => {
     const getConversations = async () => {
       const { sucsess, data } = await getUserConversations(session.user.id);
@@ -19,19 +31,12 @@ function ChatPage() {
   }, []);
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      <Header
-        setCurrentConversation={setCurrentConversation}
-        currentConversation={currentConversation}
-      />
+      <Header />
       <div className="flex flex-1 overflow-hidden">
-        <ChatList
-          conversations={conversations}
-          selectFn={setCurrentConversation}
-          currentConversations={currentConversation}
-        />
-        {currentConversation && (
+        <ChatList conversations={conversations} />
+        {currentConversationId && (
           <div className="flex-1 flex flex-col">
-            <MessageList currentConversations={currentConversation} />
+            <MessageList/>
             <MessageForm currentConversations={currentConversation} />
           </div>
         )}

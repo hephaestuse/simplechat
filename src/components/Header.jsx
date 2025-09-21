@@ -2,10 +2,18 @@ import { useEffect, useState } from "react";
 import { signOut } from "../helpers/Auth";
 import { getUserProfile } from "../helpers/userActions";
 import { ChevronLeft } from "lucide-react";
+import { useUi } from "../zustand/uiStore";
+import { useConversation } from "../zustand/conversationStore";
 
-function Header({ setCurrentConversation, currentConversation }) {
+function Header() {
   const [profile, setProfile] = useState();
-
+  const divice = useUi((state) => state.divice);
+  const currentConversation = useConversation(
+    (state) => state.currentConversationId
+  );
+  const resetCurrentConversationId = useConversation(
+    (state) => state.resetCurrentConversationId
+  );
   useEffect(() => {
     const handleGetUser = async () => {
       const { sucsess, data } = await getUserProfile();
@@ -17,7 +25,7 @@ function Header({ setCurrentConversation, currentConversation }) {
   // 👇 هندل بک
   useEffect(() => {
     const handleBack = () => {
-      setCurrentConversation("");
+      resetCurrentConversationId();
     };
 
     if (currentConversation) {
@@ -29,7 +37,7 @@ function Header({ setCurrentConversation, currentConversation }) {
     return () => {
       window.removeEventListener("popstate", handleBack);
     };
-  }, [currentConversation, setCurrentConversation]);
+  }, [currentConversation, resetCurrentConversationId]);
 
   const handleSignOut = () => {
     signOut();
@@ -37,8 +45,9 @@ function Header({ setCurrentConversation, currentConversation }) {
 
   return (
     <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      {currentConversation ? (
-        <span onClick={() => setCurrentConversation("")}>
+      {}
+      {currentConversation && divice === "mobile" ? (
+        <span onClick={() => resetCurrentConversationId()}>
           <ChevronLeft strokeWidth={1.5} />
         </span>
       ) : (

@@ -10,7 +10,6 @@ function Message({ text, senderId, time }) {
     minute: "2-digit",
   });
 
-  console.log(formattedTime);
 
   return (
     <div

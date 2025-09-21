@@ -1,20 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import { supabase } from "../lib/supabase/supabase";
+import { useConversation } from "../zustand/conversationStore";
 
-function MessageList({ currentConversations }) {
+function MessageList() {
+  const currentConversationId = useConversation(
+    (state) => state.currentConversationId
+  );
+  console.log(currentConversationId);
+  
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
-      if (!currentConversations) {
+      if (!currentConversationId) {
         return;
       }
       const { data, error } = await supabase
         .from("messages")
         .select("*")
-        .eq("conversation_id", currentConversations)
+        .eq("conversation_id", currentConversationId)
         .order("created_at", { ascending: true });
 
       if (!error) {
@@ -23,7 +29,7 @@ function MessageList({ currentConversations }) {
     };
 
     fetchMessages();
-  }, [currentConversations]);
+  }, [currentConversationId]);
 
   useEffect(() => {
     const channel = supabase
