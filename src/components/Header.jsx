@@ -4,9 +4,11 @@ import { getUserProfile } from "../helpers/userActions";
 import { ChevronLeft } from "lucide-react";
 import { useUi } from "../zustand/uiStore";
 import { useConversation } from "../zustand/conversationStore";
+import { useProfile } from "../zustand/profile";
 
 function Header() {
-  const [profile, setProfile] = useState();
+  const { username, setProfile } = useProfile();
+
   const divice = useUi((state) => state.divice);
   const currentConversation = useConversation(
     (state) => state.currentConversationId
@@ -20,7 +22,7 @@ function Header() {
       if (sucsess) setProfile(data);
     };
     handleGetUser();
-  }, []);
+  }, [setProfile]);
 
   // 👇 هندل بک
   useEffect(() => {
@@ -54,7 +56,7 @@ function Header() {
         <h1 className="text-xl font-bold">چتک</h1>
       )}
       <div className="flex items-center gap-4">
-        <span>{profile?.username}</span>
+        <span>{username}</span>
         <button
           onClick={handleSignOut}
           className="bg-red-500 px-3 py-1 rounded"

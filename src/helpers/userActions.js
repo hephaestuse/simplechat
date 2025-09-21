@@ -27,3 +27,16 @@ export async function getUserConversations(userId) {
     }
     return { sucsess: true, data }
 }
+export async function findeSearchedUser(query,myUserName) {
+    try {
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("*")
+            .ilike("username", `%${query}%`).neq("username",myUserName);
+        if (error) return { sucsess: false, data: error }
+        return { sucsess: true, data: data }
+
+    } catch (err) {
+        return { sucsess: false, data: err }
+    }
+}

@@ -22,13 +22,7 @@ function ChatPage() {
   useEffect(() => {
     setDiviceType(breakPoint);
   }, [breakPoint]);
-  useEffect(() => {
-    const getConversations = async () => {
-      const { sucsess, data } = await getUserConversations(session.user.id);
-      if (sucsess) setConversations(data);
-    };
-    getConversations();
-  }, []);
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <Header />
